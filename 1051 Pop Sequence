@@ -1,0 +1,31 @@
+#include<cstdio>
+#include<stack>
+using namespace std;
+const int maxn = 1010;
+int result[maxn];
+
+int main(){
+  int m, n, T;
+  scanf("%d%d%d", &m, &n, &T);
+  while(T--){
+    stack<int> st;
+    for(int i = 1; i <= n; ++i){
+      scanf("%d", &result[i]);
+    }
+    int current = 1;
+    bool flag = false;
+    for(int i = 1; i <= n; ++i){
+      st.push(i);
+      if(st.size() > m) break;
+      while(!st.empty() && st.top() == result[current]){
+        st.pop();
+        current++;
+      }
+     
+    }
+    if(current == n + 1) flag = true;
+    if(flag) printf("YES\n");
+    else printf("NO\n");
+  }
+  return 0;
+}

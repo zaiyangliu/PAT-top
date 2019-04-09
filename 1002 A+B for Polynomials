@@ -25,3 +25,67 @@ int main(){
   }
   return 0;
 }
+//方法二，麻烦点但是用stl容易理解想到
+#include<cstdio>
+#include<iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+struct node{
+  int expo;
+  float coef;
+};
+bool cmp(node a, node b){
+  if(a.expo != b.expo)
+    return a.expo > b.expo;
+}
+int main(){
+  vector<node> v1, v2, sum;
+  int k;
+  int a;
+  float b;
+  scanf("%d", &k);
+  for(int i = 0; i < k; ++i){
+    node temp;
+    scanf("%d%f", &a, &b);
+    temp.expo = a;
+    temp.coef = b;
+    v1.push_back(temp);
+  }
+  scanf("%d", &k);
+  for(int i = 0; i < k; ++i){
+    node tem;
+    scanf("%d%f", &a, &b);
+    tem.expo = a;
+    tem.coef = b;
+    v2.push_back(tem);
+  }
+  int len1 = v1.size();
+  int len2 = v2.size();
+  int i = 0, j = 0;
+  while(i < len1 || j < len2){
+    if((i < len1 && v1[i].expo > v2[j].expo) || j == len2){
+      sum.push_back(v1[i]);
+      i++;
+    }
+    else if(i == len1 ||(j < len2 && v1[i].expo < v2[j].expo) ){
+      sum.push_back(v2[j]);
+      j++;
+    }
+    else if(i < len1 && j < len2 && v1[i].expo == v2[j].expo){
+      node t;
+      t.expo = v1[i].expo;
+      t.coef = v1[i].coef + v2[j].coef;
+      if(t.coef != 0) sum.push_back(t);
+      i++;
+      j++;
+    }
+  }
+  int len3 = sum.size();
+  printf("%d", len3);
+  //sort(sum.begin(), sum.end(), cmp);用不用排序都行，应该是输入数据时就严格按照指数从大到小排序的
+  for(int i = 0; i < len3; ++i){
+    printf(" %d %.1f", sum[i].expo, sum[i].coef); //注意结构要保留一位小数
+  }
+ return 0;
+}

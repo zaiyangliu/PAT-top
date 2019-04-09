@@ -1,0 +1,27 @@
+#include<cstdio>
+using namespace std;
+int main(){
+  float coef[1010] = {0};
+  int k;
+  int n;
+  float an;
+  scanf("%d", &k);
+  for(int i = 0; i < k; ++i){
+    scanf("%d%f", &n, &an);
+    coef[n] += an;
+  }
+  scanf("%d", &k);
+  for(int i = 0; i < k; ++i){
+    scanf("%d%f", &n, &an);
+    coef[n] += an;
+  }
+  int cnt = 0;
+  for(int i = 0; i < 1010; ++i){
+    if(coef[i] != 0) cnt++;
+  }
+  printf("%d", cnt);
+  for(int i = 1009; i >= 0; i--){
+    if(coef[i] != 0) printf(" %d %.1f", i, coef[i]);
+  }
+  return 0;
+}

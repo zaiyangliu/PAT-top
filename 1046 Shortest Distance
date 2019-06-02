@@ -1,0 +1,23 @@
+#include<cstdio>
+#include<algorithm>
+using namespace std;
+const int Max = 100005;
+int dist[Max];
+int main(){
+    int sum = 0, query, num, left, right;
+    scanf("%d", &num);
+    for(int i = 1; i <= num; ++i){
+        int temp;
+        scanf("%d", &temp);
+        sum += temp;
+        dist[i] = sum;
+    }
+    scanf("%d", &query);
+    for(int i = 0; i < query; ++i){
+        scanf("%d%d", &left, &right);
+        if(left > right) swap(left, right);
+        int res = dist[right-1] - dist[left-1];
+        printf("%d\n", min(res, sum - res));
+    }
+    return 0;
+}

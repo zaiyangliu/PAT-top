@@ -1,0 +1,33 @@
+#include<cstdio>
+#include<queue>
+using namespace std;
+const int INF = 10000000;
+int main(){
+    queue<int> a,b;
+    int n,m,x,count = 0;
+    scanf("%d",&n);
+    for(int i = 0 ; i < n ; i++){
+        scanf("%d",&x);
+        a.push(x);
+    }
+    a.push(INF);
+    scanf("%d",&m);
+    for(int i = 0 ; i < m ; i++){
+        scanf("%d",&x);
+        b.push(x);
+        if(count == (n+m-1)/2){
+            printf("%d",min(a.front(),b.front()));
+            return 0;
+        }
+        if(a.front() < b.front()) a.pop();
+        else b.pop();
+        count++;
+    }
+    b.push(INF);
+    for(; count < (n+m-1)/2; count++){
+        if(a.front() < b.front()) a.pop();
+        else b.pop();
+    }
+    printf("%d",min(a.front(),b.front()));
+    return 0;
+}

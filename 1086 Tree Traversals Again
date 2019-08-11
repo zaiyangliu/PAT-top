@@ -1,0 +1,56 @@
+#include<cstdio>
+#include<iostream>
+#include<cstring>
+#include<stack>
+#include<algorithm>
+using namespace std;
+const int maxn = 50;
+struct node{
+    int data;
+    node* Lchild;
+    node* Rchild;
+};
+int pre[maxn], in[maxn], post[maxn];
+int n;
+node* creat(int preL, int preR, int inL, int inR){
+    if(preL > preR) return  NULL;
+    node* root = new node;
+    root->data = pre[preL];
+    int k;
+    for(k = inL; k <= inR; ++k){
+        if(in[k] == pre[preL]) break;
+    }
+    int numLeft = k - inL;
+    root->Lchild = creat(preL + 1, preL + numLeft, inL, k - 1);
+    root->Rchild = creat(preL + numLeft + 1, preR, k + 1, inR);
+    return root;
+}
+int num = 0;
+void postorder(node* root){
+    if(root == NULL) return;
+    postorder(root->Lchild);
+    postorder(root->Rchild);
+    printf("%d", root->data);
+    num++;
+    if(num < n) printf(" ");
+}
+int main(){
+    scanf("%d", &n);
+    string s;
+    stack<int> st;
+    int x, preIndex = 0, inIndex = 0;
+    for(int i = 0; i < 2 * n; ++i){
+        cin >> s;
+        if(s == "Push"){
+            scanf("%d", &x);
+            pre[preIndex++] = x;
+            st.push(x);
+        }else{
+            in[inIndex++] = st.top();
+            st.pop();
+        }
+    }
+    node* root = creat(0, n - 1, 0, n - 1);
+    postorder(root);
+    return 0;
+}

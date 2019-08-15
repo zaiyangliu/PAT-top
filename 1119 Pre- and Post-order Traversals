@@ -1,0 +1,55 @@
+#include<cstdio>
+struct node{
+    int val;
+    node *lchild, *rchild;
+    node(int v):val(v), lchild(NULL), rchild(NULL){}
+};
+int pre[35], post[35];
+bool beUnique = true;
+int n;
+node* creatTree(int preL, int preR, int postL, int postR){
+    if(preL > preR) return NULL;
+    if(preL == preR) return new node(pre[preL]);
+    int rootval = pre[preL], kid = pre[preL +1];
+    node* root = new node(rootval);
+    int pos = postL;
+    while(post[pos] != kid){
+            pos++;
+    }
+    int subTreeNumber = pos - postL + 1;
+    if(subTreeNumber == preR - preL){
+        beUnique = false;
+        root->lchild = creatTree(preL +1, preR, postL, pos);
+        root->rchild = NULL;
+    }else{
+        root->lchild = creatTree(preL + 1, preL + subTreeNumber, postL, pos);
+        root->rchild = creatTree(preL + subTreeNumber + 1, preR, pos +1, postR - 1);
+    }
+    return root;
+}
+int cnt = 0;
+void inOrderTraversal(node* root){
+    
+    if(root){
+        inOrderTraversal(root->lchild);
+        printf("%d", root->val);
+        cnt++;
+        if(cnt < n) printf(" ");
+        else printf("\n");
+        inOrderTraversal((root->rchild));
+    }
+}
+int main(){
+    scanf("%d", &n);
+    for(int i = 0; i < n; ++i){
+        scanf("%d", &pre[i]);
+    }
+    for(int i = 0; i < n; ++i){
+        scanf("%d", &post[i]);
+    }
+    node* root = creatTree(0, n - 1, 0, n - 1);
+    printf("%s\n", beUnique ?  "Yes" : "No");
+    inOrderTraversal((root));
+    return 0;
+}
+//参考https://article.itxueyuan.com/Dj265B

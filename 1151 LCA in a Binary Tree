@@ -1,0 +1,75 @@
+#include<cstdio>
+const int maxn = 10010;
+int pre[maxn], in[maxn];
+int n, m;
+struct node{
+    int data;
+    node* lchild;
+    node* rchild;
+};
+node* creatTree(int preL, int preR, int inL, int inR){
+    if(preL > preR) return NULL;
+    node* root = new node;
+    root->data = pre[preL];
+    root->lchild = root->rchild = NULL;
+    int k;
+    for(k = inL; k <= inR; ++k){
+        if(in[k] == pre[preL]){
+            break;
+        }
+    }
+    int numLeft = k - inL;
+    root->lchild = creatTree(preL + 1, preL + numLeft, inL, k - 1);
+    root->rchild = creatTree(preL + numLeft + 1, preR, k + 1, inR);
+    return root;
+}
+node* lca(node* root, int u, int v){
+    if(root == NULL) return NULL;
+    if(root->data == u || root->data == v){
+        return root;
+    }
+   node* L = lca(root->lchild, u, v);
+   node* R = lca(root->rchild, u, v);
+   if( L && R)  return root;
+   return L == NULL ? R : L;
+
+}
+
+bool findRoot(int x){
+    for(int i=0;i<n;++i){
+        if(in[i]==x){
+            return true;
+        }
+    }
+    return false;
+}
+
+int main(){
+    scanf("%d%d", &m, &n);
+    for(int i = 0; i < n; ++i){
+        scanf("%d", &in[i]);
+    }
+    for(int i = 0; i < n; ++i){
+        scanf("%d", &pre[i]);
+    }
+    node* root = creatTree(0, n-1, 0, n-1);
+    for(int i = 0; i< m; ++i){
+        int u, v;
+        scanf("%d %d", &u, &v);
+        if(!findRoot(u) && !findRoot(v)) {
+            printf("ERROR: %d and %d are not found.\n", u, v);
+        }else if(!findRoot(u) && findRoot(v)){
+            printf("ERROR: %d is not found.\n", u);
+        }else if(!findRoot(v) && findRoot(u)){
+            printf("ERROR: %d is not found.\n", v);
+        }else{
+            node* temp = lca(root, u, v);
+            if(temp->data == u || temp->data == v){
+                printf("%d is an ancestor of %d.\n", temp->data == u ? u : v, temp->data == u ? v : u);
+            }else{
+                printf("LCA of %d and %d is %d.\n", u, v, temp->data);
+            }
+        }
+    }
+    return 0;
+}

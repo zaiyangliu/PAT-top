@@ -1,0 +1,40 @@
+#include<iostream>
+#include<vector>
+#include<cstdio>
+using namespace std;
+vector<int> v;
+int a[1009], n, isMax = 1, isMin = 1;
+void DFS(int index){
+    if(index * 2 + 1 > n && index * 2 > n){
+        if(index <= n){
+            for(int i = 0; i < v.size(); ++i){
+                printf("%d", v[i]);
+                if(i < v.size()- 1) printf(" ");
+                else printf("\n");
+            }
+        }
+    }else{
+            v.push_back(a[2*index + 1]);
+            DFS(2*index + 1);
+            v.pop_back();
+            v.push_back(a[2*index]);
+            DFS(2*index);
+            v.pop_back();
+        }
+}
+int main(){
+    scanf("%d", &n);
+    for(int i = 1; i <= n; ++i){
+        scanf("%d", &a[i]);
+    }
+    v.push_back(a[1]);
+    DFS(1);
+    for(int i = 2; i <= n; ++i){
+        if(a[i/2] > a[i]) isMin = 0;
+        if(a[i/2] < a[i]) isMax = 0;
+    }
+    if(isMin == 1) printf("Min Heap\n");
+    else if(isMax == 1) printf("Max Heap\n");
+    else printf("Not Heap\n");
+    return 0;
+}

@@ -1,0 +1,45 @@
+#include<cstdio>
+#include<vector>
+using namespace std;
+const int maxv = 50010;
+int pre[maxv], in[maxv];
+vector<int> v;
+int n;
+struct node{
+    int data;
+    node* lchild;
+    node* rchild;
+    node(int v): data(v), lchild(NULL), rchild(NULL){}
+};
+node* creatTree(int preL, int preR, int inL, int inR){
+    node* root = new node(pre[preL]);
+    if(inL > inR) return NULL;
+    int k;
+    for(k = inL; k <= inR; ++k){
+        if(in[k] == pre[preL]){
+            break;
+        }
+    }
+    int numLeft = k - inL;
+    root->lchild = creatTree(preL + 1, preL + numLeft, inL, k - 1);
+    root->rchild = creatTree(preL + numLeft + 1, preR, k + 1, inR);
+    return root;
+}
+void postOrder(node* root){
+    if(root == NULL) return;
+    postOrder(root->lchild);
+    postOrder(root->rchild);
+    v.push_back(root->data);
+}
+int main(){
+    scanf("%d", &n);
+    for(int i = 0; i < n; ++i){
+        scanf("%d", &pre[i]);
+    }
+    for(int i = 0; i < n; ++i){
+        scanf("%d", &in[i]);
+    }
+    node* root = creatTree(0, n - 1, 0, n - 1);
+    postOrder(root);
+    printf("%d\n", v[0]);
+}

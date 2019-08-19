@@ -1,0 +1,49 @@
+#include<iostream>
+#include<cstdio>
+#include<vector>
+#include<string>
+#include<algorithm>
+#include<unordered_map>
+using namespace std;
+unordered_map<int, bool> mp;
+struct node{
+    int a, b;
+};
+bool cmp(node x, node y){
+    return x.a != y.a ? x.a < y.a : x.b < y.b;
+}
+int main(){
+    int n, m, k;
+    scanf("%d%d", &n, &m);
+    vector<int> v[10000];
+    for(int i = 0; i < m; ++i){
+        string id1, id2;
+        cin >> id1 >> id2;
+        if(id1.length() == id2.length()){
+            v[abs(stoi(id1))].push_back(abs(stoi(id2)));
+            v[abs(stoi(id2))].push_back(abs(stoi(id1)));
+        }
+        mp[abs(stoi(id1)) * 10000 + abs(stoi(id2))] = mp[abs(stoi(id2)) * 10000 + abs(stoi(id1))] = true;
+    }
+    scanf("%d", &k);
+    for(int i = 0; i < k; ++i){
+        vector<node> ans;
+        int a ,b;
+        cin >> a >> b;
+        for(int i = 0; i < v[abs(a)].size(); ++i){
+            for(int j = 0; j < v[abs(b)].size(); ++j){
+                if(v[abs(a)][i] == abs(b) || abs(a)== v[abs(b)][j]) continue;
+                if(mp[v[abs(a)][i] * 10000 + abs(v[abs(b)][j])] == true){
+                    ans.push_back(node{v[abs(a)][i], v[abs(b)][j]});
+                }
+            }
+        }
+        sort(ans.begin(), ans.end(), cmp);
+        printf("%d\n", int(ans.size()));
+        for(int i = 0; i < ans.size(); ++i){
+            printf("%04d %04d\n", ans[i].a, ans[i].b);
+        }
+
+    }
+    return 0;
+}

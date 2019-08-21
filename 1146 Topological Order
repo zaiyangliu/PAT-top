@@ -1,0 +1,52 @@
+#include<cstdio>
+#include<vector>
+using namespace std;
+const int maxv = 1010;
+vector<int> G[maxv];
+int  inDegree[maxv];
+int  tempDegree[maxv];
+vector<int> ans;
+bool topSort(vector<int> &vc){
+    for(int i = 0; i < vc.size(); ++i){
+        int u = vc[i];
+        if(tempDegree[u] == 0){
+            for(int j = 0; j < G[u].size(); ++j){
+                tempDegree[G[u][j]]--;
+            }
+        }else{
+            return false;
+        }
+    }
+    return true;
+}
+int main(){
+    int n, m;
+    scanf("%d%d", &n, &m);
+    for(int i = 0; i < m; ++i){
+        int a, b;
+        scanf("%d%d", &a, &b);
+        G[a].push_back(b);
+        inDegree[b]++;
+    }
+    int query;
+    scanf("%d", &query);
+    for(int i = 0; i < query; ++i){
+        vector<int> vc;
+        for(int i = 0; i < maxv; ++i){
+        tempDegree[i] = inDegree[i];
+    }
+        for(int j = 0; j < n; ++j){
+            int x;
+            scanf("%d", &x);
+            vc.push_back(x);
+        }
+        if(!topSort(vc)){
+            ans.push_back(i);
+        }
+    }
+    for(int i = 0; i < ans.size(); ++i){
+        if(i == 0) printf("%d", ans[i]);
+        else printf(" %d", ans[i]);
+    }
+    return 0;
+}

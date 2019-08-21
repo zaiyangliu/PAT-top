@@ -1,0 +1,54 @@
+#include<cstdio>
+#include<vector>
+#include<set>
+using namespace std;
+const int maxv = 10000 + 10;
+const int INF = 0x3fffffff;
+vector<int> G[maxv];
+int n, m;
+int color[maxv] ;
+bool Judge(){
+    for(int i = 0; i < n; ++i){
+        int temp = color[i];
+        for(int j = 0; j < G[i].size(); ++j){
+            if(temp >= 0 && G[i][j] != INF){
+                if(temp == color[G[i][j]]){
+                    return false;
+                }
+            }
+        }
+    }
+    return true;
+}
+int calcNum(int color[]){
+    set<int> s;
+    for(int i = 0; i < n; ++i){
+        s.insert(color[i]);
+    }
+    return s.size();
+}
+int main(){
+    scanf("%d%d", &n, &m);
+    for(int i = 0; i < m; ++i){
+        int a, b;
+        scanf("%d%d", &a, &b);
+        G[a].push_back(b);
+        G[b].push_back(a);
+    }
+    int k;
+    scanf("%d", &k);
+    for(int i = 0; i < k; ++i){
+        fill(color, color + n, -1);
+        for(int i = 0; i < n; ++i){
+            int x;
+            scanf("%d", &x);
+            color[i] = x;
+        }
+        if(!Judge()) printf("No\n");
+        else{
+            int sum = calcNum(color);
+            printf("%d-coloring\n", sum);
+        }
+    }
+    return 0;
+}

@@ -1,0 +1,50 @@
+#include<cstdio>
+#include<iostream>
+#include<vector>
+using namespace std;
+const int maxn = 100000;
+struct Node{
+   int address;
+    int data;
+    int next;
+}node[maxn];
+int main(){
+    int begin, n, k, p;
+    vector<Node> v;
+    scanf("%d%d%d", &begin, &n, &k);
+    for(int i = 0; i < n; ++i){
+        int address;
+        scanf("%d", &address);
+        scanf("%d%d", &node[address].data, &node[address].next);
+        node[address].address = address;
+    }
+    p = begin;
+    while(p != -1){
+        int data = node[p].data;
+        if(data < 0){
+            v.push_back(node[p]);
+        }
+        p = node[p].next;
+    }
+    p = begin;
+    while(p != -1){
+        int data = node[p].data;
+        if(data >= 0 && data <= k){
+            v.push_back(node[p]);
+        }
+        p = node[p].next;
+    }
+    p = begin;
+    while(p != -1){
+        int data = node[p].data;
+        if(data > k){
+            v.push_back(node[p]);
+        }
+        p = node[p].next;
+    }
+    for(int i = 0; i < v.size() - 1; ++i){
+        printf("%05d %d %05d\n", v[i].address, v[i].data, v[i+1].address);
+    }
+    printf("%05d %d -1\n", v[v.size()-1].address, v[v.size()-1].data);
+    return 0;
+}

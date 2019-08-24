@@ -1,0 +1,52 @@
+#include<cstdio>
+#include<iostream>
+#include<vector>
+#include<map>
+#include<algorithm>
+using namespace std;
+struct node{
+    string id;
+    int Gp, Gmid, Gfinal, Gall;
+};
+bool cmp(node a, node b){
+    if(a.Gall != b.Gall) return a.Gall > b.Gall;
+    else return a.id < b.id;
+}
+int main(){
+    int np, nmid, nfinal;
+    vector<node> ans;
+    map<string, int> idx;
+    string s;
+    int score;
+    scanf("%d%d%d", &np, &nmid, &nfinal);
+    int cnt = 1;
+    for(int i = 0; i < np; ++i){
+        cin >> s >> score;
+        if(score >= 200){
+            ans.push_back(node{s, score, -1, -1, 0});
+            idx[s] = cnt++;
+        }
+    }
+    for(int i = 0; i < nmid; ++i){
+        cin >> s >> score;
+        if(idx[s] != 0){
+            ans[idx[s] - 1].Gmid = score;
+        }
+    }
+    for(int i = 0; i < nfinal; ++i){
+        cin >> s >> score;
+        if(idx[s] != 0){
+            int temp = idx[s] - 1;
+            ans[temp].Gfinal = ans[temp].Gall = score;
+            if(ans[temp].Gmid > ans[temp].Gfinal){
+                ans[temp].Gall = int(ans[temp].Gmid * 0.4 + ans[temp].Gfinal * 0.6 + 0.5);
+            }
+        }
+    }
+    sort(ans.begin(), ans.end(), cmp);
+    for(int i = 0; i < ans.size(); ++i){
+        if(ans[i].Gall >= 60)
+            printf("%s %d %d %d %d\n", ans[i].id.c_str(), ans[i].Gp, ans[i].Gmid, ans[i].Gfinal, ans[i].Gall);
+    }
+    return 0;
+}

@@ -1,0 +1,39 @@
+#include<cstdio>
+#include<algorithm>
+#include<iostream>
+using namespace std;
+string rev(string s){
+    reverse(s.begin(), s.end());
+    return s;
+}
+string add(string a, string b){
+    string s = a;
+    int carry = 0;
+    for(int i = a.length() - 1; i >= 0; --i){
+        s[i] = (a[i] - '0' + b[i] - '0' + carry) % 10 + '0';
+        carry = (a[i] - '0' + b[i] - '0' + carry) / 10;
+    }
+    if(carry > 0){
+        s = "1" + s;
+    }
+    return s;
+}
+int main(){
+    string s;
+    cin >> s;
+    if(s == rev(s)){
+        printf("%s is a palindromic number.\n", s.c_str());
+        return 0;
+    }
+    for(int i = 0; i < 10; ++i){
+        string sum = add(s, rev(s));
+        cout << s << " + " << rev(s) << " = " << sum << endl;
+        if(sum == rev(sum)){
+            printf("%s is a palindromic number.", sum.c_str());
+            return 0;
+        }
+        s = sum;
+    }
+    cout << "Not found in 10 iterations.\n";
+    return 0;
+}

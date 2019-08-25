@@ -1,0 +1,68 @@
+#include<cstdio>
+#include<iostream>
+#include<algorithm>
+#include<cmath>
+using namespace std;
+const int maxr = 10010;
+const int maxc = 110;
+int G[maxr][maxc];
+int a[maxr];
+bool cmp(int a, int b){
+    return a > b;
+}
+int main(){
+    int num;
+    scanf("%d", &num);
+    for(int i = 0; i < num; ++i){
+        scanf("%d", &a[i]);
+    }
+    if(num == 1){
+        printf("%d", a[0]);
+        return 0;
+    }
+    int m = (int)ceil(sqrt(1.0 * num));
+    while(num % m != 0){
+        m++;
+    }
+    int n = num / m;
+    sort(a, a + num, cmp);
+    int up = 1, down = m, left = 1, Right = n;
+    int now = 0;
+    int i = 1, j = 1;
+    while(now < num){
+        while(now < num && j < Right){
+            G[i][j] = a[now++];
+            j++;
+        }
+        while(now < num && i < down){
+            G[i][j] = a[now++];
+            i++;
+        }
+        while(now < num && j > left){
+            G[i][j] = a[now++];
+            j--;
+        }
+        while(now < num && i > up){
+            G[i][j] = a[now++];
+            i--;
+        }
+        up++;
+        down--;
+        Right--;
+        left++;
+        i++;
+        j++;
+        if(now == num - 1){
+            G[i][j] = a[now++];
+        }
+    }
+
+    for(int i = 1; i <= m; ++i){
+        for(int j = 1; j <= n; ++j){
+            printf("%d", G[i][j]);
+            if(j < n) printf(" ");
+            else printf("\n");
+        }
+    }
+    return 0;
+}

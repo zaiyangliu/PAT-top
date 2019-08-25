@@ -1,0 +1,32 @@
+#include<cstdio>
+#include<iostream>
+#include<map>
+#include<vector>
+using namespace std;
+int main(){
+    int m, n, begin;
+    scanf("%d%d%d", &m, &n, &begin);
+    vector<string> v(m+1);
+    map<string, int> mp;
+    for(int i = 1; i <= m; ++i){
+        cin >> v[i];
+    }
+    if(begin > m){ 
+        printf("Keep going...\n");
+        return 0;
+    }
+    cout << v[begin] << endl;
+    int pre = begin;
+    for(int i = begin + n; i <= m; i += n){
+         mp[v[pre]] = 1;
+         if(mp[v[i]] != 0){
+            while(mp[v[i]] != 0){
+                i++;
+            }
+        }
+        cout << v[i] << endl;
+        pre = i;
+        
+    }
+    return 0;
+}

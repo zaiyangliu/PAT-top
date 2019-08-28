@@ -1,0 +1,73 @@
+#include<cstdio>
+#include<iostream>
+#include<deque>
+using namespace std;
+const int maxn = 40;
+int in[maxn], post[maxn];
+struct node{
+    int data;
+    node *lchild, *rchild;
+};
+node* creatTree(int inL, int inR, int postL, int postR){
+    if(inL > inR) return NULL;
+    node* root = new node;
+    root->data = post[postR];
+    root->lchild = root->rchild = NULL;
+    int k;
+    for(k = inL; k <= inR; ++k){
+        if(in[k] == post[postR]) break;
+    }
+    int numleft = k - inL;
+    root->lchild = creatTree(inL, k - 1, postL, postL + numleft - 1);
+    root->rchild = creatTree(k + 1, inR, postL + numleft, postR - 1);
+    return root;
+}
+void zig(node* root){
+    deque<node*> dq;
+    node* T = NULL;
+    if(!root) return;
+    dq.push_back(root);
+    bool cnt = false;
+    T = dq.front();
+    dq.pop_front();
+    printf("%d", T->data);
+    if(T->lchild != NULL) dq.push_back(T->lchild);
+    if(T->rchild != NULL) dq.push_back(T->rchild);
+    cnt = true;
+    int n;
+    while(!dq.empty()){
+        n = dq.size();
+        if(cnt){
+            for(int i = 0; i < n; ++i){
+                T = dq.front();
+                printf(" %d", T->data);
+                if(T->lchild != NULL) dq.push_back(T->lchild);
+                if(T->rchild != NULL) dq.push_back(T->rchild);
+                dq.pop_front();
+            }
+            cnt = false;
+        }else{
+            for(int i = 0; i < n; ++i){
+                T = dq.back();
+                printf(" %d", T->data);
+                if(T->rchild != NULL) dq.push_front(T->rchild);
+                if(T->lchild != NULL) dq.push_front(T->lchild);
+                dq.pop_back();
+            }
+            cnt = true;
+        }
+    }
+}
+int main(){
+    int n;
+    scanf("%d", &n);
+    for(int i = 0; i < n; ++i){
+        scanf("%d", &in[i]);
+    }
+    for(int i = 0; i < n; ++i){
+        scanf("%d", &post[i]);
+    }
+    node* root = creatTree(0, n -1, 0, n - 1);
+    zig(root);
+    return 0;
+}

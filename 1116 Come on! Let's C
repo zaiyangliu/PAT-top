@@ -1,0 +1,43 @@
+#include<cstdio>
+#include<iostream>
+#include<map>
+#include<cstring>
+using namespace std;
+const int maxn = 10000 + 10;
+int vist[maxn];
+bool isPrime(int n){
+    if(n < 2) return false;
+    for(int i = 2; i * i <= n; ++i){
+        if(n % i == 0) return false;
+    }
+    return true;
+}
+int main(){
+    int n;
+    scanf("%d", &n);
+    fill(vist, vist + maxn, 0);
+    map<string, int> mp;
+    for(int i = 1; i <= n; ++i){
+        string id;
+        cin >> id;
+        mp[id] = i;
+    }
+    int k;
+    scanf("%d", &k);
+    for(int i = 0; i < k; ++i){
+        string id;
+        cin >> id;
+        if(vist[stoi(id)] == 1){
+            printf("%s: Checked\n", id.c_str());
+        }else if(mp[id] != 0){
+            if(mp[id] == 1) printf("%s: Mystery Award\n", id.c_str());
+            else if(isPrime(mp[id])) printf("%s: Minion\n", id.c_str());
+            else printf("%s: Chocolate\n", id.c_str());
+            vist[stoi(id)] = 1;
+
+        }else{
+            printf("%s: Are you kidding?\n", id.c_str());
+        }
+    }
+    return 0;
+}

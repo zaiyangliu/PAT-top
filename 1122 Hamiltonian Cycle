@@ -1,0 +1,37 @@
+#include<cstdio>
+#include<set>
+#include<vector>
+using namespace std;
+const int INF = 0x3fffffff;
+const int maxv = 300;
+int G[maxv][maxv];
+int main(){
+    int n, m;
+    fill(G[0], G[0] + maxv * maxv, INF);
+    scanf("%d%d", &n, &m);
+    for(int i = 0; i < m; ++i){
+        int a, b;
+        scanf("%d%d", &a, &b);
+        G[a][b] = 1;
+        G[b][a] = 1;
+    }
+    int cnt;
+    scanf("%d", &cnt);
+    while(cnt--){
+        int k;
+        scanf("%d", &k);
+        set<int> s;
+        vector<int> v(k);
+        int flag1 = 1, flag2 = 1;
+        for(int i = 0; i < k; ++i){
+            scanf("%d", &v[i]);
+            s.insert(v[i]);
+        }
+        if(s.size() != n || k - 1 != n || v.front() != v.back()) flag1 = 0;
+        for(int i = 0; i < k - 1; ++i){
+            if(G[v[i]][v[i+1]] == INF) flag2 = 0;
+        }
+        printf("%s", flag1 && flag2 ? "YES\n" : "NO\n");
+    }
+    return 0;
+}

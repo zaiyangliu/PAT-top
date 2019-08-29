@@ -1,0 +1,37 @@
+#include<iostream>
+#include<cstdio>
+#include<set>
+#include<vector>
+#include<map>
+using namespace std;
+int main(){
+    map<int,int> mp;
+    set<int> s;
+    vector<int> v;
+    int n, m;
+    scanf("%d", &n);
+    for(int i = 0; i < n; ++i){
+        int a, b;
+        scanf("%d%d", &a, &b);
+        mp[a] = b;
+        mp[b] = a;
+    }
+    scanf("%d", &m);
+    for(int i = 0; i < m; ++i){
+        int temp;
+        scanf("%d", &temp);
+        s.insert(temp);
+        v.push_back(mp[temp]);
+    }
+    for(int i = 0;i < v.size(); ++i){
+        s.erase(v[i]);
+    }
+    printf("%d\n", s.size());
+    int cnt = 0;
+    for(set<int>::iterator it = s.begin(); it != s.end(); ++it){
+        if(cnt == 0) printf("%05d", *it);
+        else printf(" %05d", *it);
+        cnt++;
+    }
+    return 0;
+}

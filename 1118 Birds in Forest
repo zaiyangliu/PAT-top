@@ -1,0 +1,70 @@
+#include<cstdio>
+#include<set>
+using namespace std;
+const int maxn = 10000 + 10;
+int father[maxn];
+bool isRoot[maxn];
+int findFather(int x){
+    int a = x;
+    while(x != father[x]){
+        x = father[x];
+    }
+    while(a != father[a]){
+        int z = a;
+        a = father[a];
+        father[z] = x;
+    }
+    return x;
+}
+void Union(int a, int b){
+    int faA = findFather(a);
+    int faB = findFather(b);
+    if (faA != faB){
+        father[faA] = faB;
+    }
+}
+void init(){
+    for(int i = 1; i <= maxn; ++i){
+        father[i] = i;
+        isRoot[i] = false;
+    }
+}
+int main(){
+    int n;
+    scanf("%d", &n);
+    init();
+    set<int> s;
+    for(int i = 0; i < n; ++i){
+        int k;
+        scanf("%d", &k);
+        int pre;
+        scanf("%d", &pre);
+        s.insert(pre);
+        for(int i = 1; i < k; ++i){
+            int now;
+            scanf("%d", &now);
+            s.insert(now);
+            Union(pre, now);
+            pre = now;
+        }
+    }
+    int num = s.size();
+    for(int i = 1; i <= num; ++i){
+        isRoot[findFather(i)] = true;
+    }
+    int ans = 0;
+    for(int i = 1; i <= num; ++i){
+        ans += isRoot[i];
+    }
+    printf("%d %d\n", ans, num);
+    int N;
+    scanf("%d", &N);
+    for(int i = 0; i < N; ++i){
+        int a, b;
+        scanf("%d%d", &a, &b);
+        int faA = findFather(a);
+        int faB = findFather(b);
+        printf("%s\n", faA == faB ? "Yes" : "No");
+    }
+    return 0;
+}

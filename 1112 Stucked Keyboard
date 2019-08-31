@@ -1,0 +1,33 @@
+#include<iostream>
+using namespace std;
+int well[1010], vis[1010];
+int main(){
+    int k;
+    scanf("%d", &k);
+    string s;
+    cin >> s;
+    fill(well, well + 1010, false);
+    string ans;
+    for(int i = 0; i < s.length();){
+        int j = i;
+        while(j < s.length() && s[i] == s[j]) j++;
+        if((j - i) % k != 0) well[s[i]] = true;
+        else {
+            ans += s[i];
+        }
+        i = j;
+    }
+    for(int i = 0; i < ans.length(); ++i){
+            if(well[ans[i]]==false && vis[ans[i]]==0){
+                cout<<ans[i];
+                vis[ans[i]]=true;
+            }
+    }
+    cout << endl;
+    for(int i = 0; i < s.length(); i++){
+        cout << s[i];
+        if(well[s[i]] == false) i = i + k - 1;
+    }
+    cout << endl;
+    return 0;
+}
